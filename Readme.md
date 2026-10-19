@@ -29,6 +29,22 @@ O estudo investiga se a hierarquia populacional dos 184 municípios do Ceará se
 
 **Conclusão:** os 20 maiores municípios são compatíveis com a Lei de Zipf (a hipótese *q* = 1 não é rejeitada, *p* = 0,887). O conjunto completo tem distribuição mais rasa que a lei estrita (*p* < 0,001), com forte primazia de Fortaleza. O R² elevado mostra boa aderência a uma lei de potência, mas não prova que a posição cause o tamanho das cidades.
 
+## Comparação com outros estados
+
+A seção 12 do notebook repete o mesmo estudo para a Bahia, São Paulo e o Paraná, com os mesmos dados e o mesmo método.
+
+| Resultado | Ceará | Bahia | São Paulo | Paraná |
+|---|---:|---:|---:|---:|
+| Municípios | 184 | 417 | 645 | 399 |
+| Participação da maior cidade | 27,6% | 17,1% | 25,8% | 15,5% |
+| Razão 1ª/2ª | 6,83 | 3,92 | 8,87 | 3,19 |
+| Gini | 0,617 | 0,584 | 0,802 | 0,709 |
+| *q* (todos) | 0,901 | 0,831 | 1,410 | 1,122 |
+| *q* (20 maiores) | 0,988 | 0,927 | 0,878 | 0,840 |
+| *p* do teste *q* = 1 (20 maiores) | 0,887 | 0,207 | 0,199 | 0,001 |
+
+Entre os 20 maiores, o Ceará tem o expoente mais próximo de 1, e o Paraná é o único estado em que a Lei de Zipf é rejeitada. A primazia de Fortaleza só é superada pela de São Paulo. Com todos os municípios, *q* varia muito entre os estados (de 0,83 a 1,41), porque depende do número de municípios pequenos de cada um.
+
 ## Estrutura do projeto
 
 ```
@@ -36,6 +52,7 @@ O estudo investiga se a hierarquia populacional dos 184 municípios do Ceará se
 ├── Lei_de_Zipf_Ceara_reproducao.ipynb   # notebook que reproduz toda a análise
 ├── pyproject.toml                       # dependências do projeto
 ├── uv.lock                              # versões exatas das dependências
+├── pdfs/                                # artigo em PDF
 ├── data/                                # dados baixados do IBGE (gerado, fora do git)
 └── notebook_output/                     # figura, CSVs e JSON de resultados (gerado, fora do git)
 ```
@@ -64,8 +81,13 @@ As células baixam os dados para `data/` (e reutilizam os arquivos nas execuçõ
 | `municipios_ceara_populacao_2022.csv` | população, posição e logaritmos de cada município |
 | `resultados_regressao.csv` | resultados das duas regressões |
 | `resultados_resumo.json` | resumo completo, incluindo as estatísticas auxiliares |
+| `figura_zipf_outros_estados.png` | mapas e gráficos rank-size da Bahia, de São Paulo e do Paraná |
+| `figura_comparacao_estados.png` | curvas rank-size dos quatro estados e expoentes *q* com IC de 95% |
+| `comparacao_estados_concentracao.csv` | participação da maior cidade, razão 1ª/2ª e Gini por estado |
+| `comparacao_estados_regressao.csv` | regressões de cada estado (todos os municípios e 20 maiores) |
+| `municipios_<estado>_populacao_2022.csv` | população e posição dos municípios da Bahia, de São Paulo e do Paraná |
 
-Os valores esperados estão na seção 11 do notebook. Para recomeçar do zero, apague `data/` e `notebook_output/` e execute tudo de novo.
+Os valores esperados estão nas seções 11 (Ceará) e 12 (comparação) do notebook. Para recomeçar do zero, apague `data/` e `notebook_output/` e execute tudo de novo.
 
 ## Limitações
 
