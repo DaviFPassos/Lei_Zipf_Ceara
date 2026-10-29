@@ -27,7 +27,7 @@ O estudo investiga se a hierarquia populacional dos 184 municípios do Ceará se
 | Razão Fortaleza/Caucaia | 6,83 |
 | Gini das populações municipais | 0,6172 |
 
-**Conclusão:** os 20 maiores municípios são compatíveis com a Lei de Zipf (a hipótese *q* = 1 não é rejeitada, *p* = 0,887). O conjunto completo tem distribuição mais rasa que a lei estrita (*p* < 0,001), com forte primazia de Fortaleza. O R² elevado mostra boa aderência a uma lei de potência, mas não prova que a posição cause o tamanho das cidades.
+**Conclusão:** os 20 maiores municípios são compatíveis com a Lei de Zipf (a hipótese *q* = 1 não é rejeitada, *p* = 0,887). Pelo erro padrão usual da regressão, o conjunto completo tem distribuição mais rasa que a lei estrita (*p* < 0,001), mas esse erro é subestimado; com o erro de Gabaix e Ibragimov (2011), *q* = 1 não é rejeitado (*p* = 0,29). O R² elevado mostra que a relação é bem descrita por uma reta, mas não prova que a distribuição seja uma lei de potência nem que a posição cause o tamanho das cidades.
 
 ## Comparação com outros estados
 
@@ -45,6 +45,21 @@ A seção 12 do notebook repete o mesmo estudo para a Bahia, São Paulo e o Para
 
 Entre os 20 maiores, o Ceará tem o expoente mais próximo de 1, e o Paraná é o único estado em que a Lei de Zipf é rejeitada. A primazia de Fortaleza só é superada pela de São Paulo. Com todos os municípios, *q* varia muito entre os estados (de 0,83 a 1,41), porque depende do número de municípios pequenos de cada um.
 
+## Estimação por máxima verossimilhança (Newman, 2005)
+
+A seção 13 do notebook segue as recomendações de Newman (2005): estima o expoente α da lei de potência p(x) ∝ x^(−α) por máxima verossimilhança, só na cauda acima de x_min, escolhido pelo critério de Kolmogorov-Smirnov, e testa a aderência por bootstrap (Clauset, Shalizi e Newman, 2009). A relação com o expoente de Zipf é *q* = 1/(α − 1), de modo que a Lei de Zipf corresponde a α = 2. A seção também refaz o teste *q* = 1 da regressão com o erro padrão de Gabaix e Ibragimov (2011).
+
+| Resultado | Ceará | Bahia | São Paulo | Paraná |
+|---|---:|---:|---:|---:|
+| x_min (habitantes) | 15.157 | 24.661 | 16.641 | 10.233 |
+| Municípios na cauda | 129 | 123 | 287 | 192 |
+| α (máxima verossimilhança) | 2,18 ± 0,10 | 2,44 ± 0,13 | 1,79 ± 0,05 | 2,05 ± 0,08 |
+| *p* do teste α = 2 | 0,089 | < 0,001 | < 0,001 | 0,539 |
+| *p* de aderência (bootstrap) | 0,033 | 0,728 | 0,000 | 0,663 |
+| *p* do teste *q* = 1, 20 maiores, erro de Gabaix-Ibragimov | 0,970 | 0,802 | 0,661 | 0,548 |
+
+No Ceará, o expoente é compatível com Zipf, mas uma única lei de potência descreve mal a cauda (*p* = 0,033): Fortaleza é grande demais e há só 8 municípios acima de 100 mil habitantes, onde o ajuste prevê 14. Com o erro padrão corrigido, nenhum estado rejeita *q* = 1 entre os 20 maiores, e o Paraná, rejeitado pela regressão, é o estado mais próximo de Zipf pela máxima verossimilhança.
+
 ## Estrutura do projeto
 
 ```
@@ -52,7 +67,9 @@ Entre os 20 maiores, o Ceará tem o expoente mais próximo de 1, e o Paraná é 
 ├── Lei_de_Zipf_Ceara_reproducao.ipynb   # notebook que reproduz toda a análise
 ├── pyproject.toml                       # dependências do projeto
 ├── uv.lock                              # versões exatas das dependências
-├── pdfs/                                # artigo em PDF
+├── artigo/artigo.typ                    # código-fonte do artigo (Typst)
+├── pdfs/entrega/                        # artigo em PDF
+├── pdfs/bibliografia/                   # artigo de Newman (2005)
 ├── data/                                # dados baixados do IBGE (gerado, fora do git)
 └── notebook_output/                     # figura, CSVs e JSON de resultados (gerado, fora do git)
 ```
@@ -86,18 +103,35 @@ As células baixam os dados para `data/` (e reutilizam os arquivos nas execuçõ
 | `comparacao_estados_concentracao.csv` | participação da maior cidade, razão 1ª/2ª e Gini por estado |
 | `comparacao_estados_regressao.csv` | regressões de cada estado (todos os municípios e 20 maiores) |
 | `municipios_<estado>_populacao_2022.csv` | população e posição dos municípios da Bahia, de São Paulo e do Paraná |
+| `maxima_verossimilhanca_estados.csv` | x_min, α, erro padrão, testes e participação dos 10% maiores por estado |
+| `erro_padrao_gabaix_ibragimov.csv` | teste *q* = 1 da regressão com o erro padrão de Gabaix e Ibragimov |
+| `figura_maxima_verossimilhanca.png` | distribuições cumulativas dos quatro estados e α por método |
 
-Os valores esperados estão nas seções 11 (Ceará) e 12 (comparação) do notebook. Para recomeçar do zero, apague `data/` e `notebook_output/` e execute tudo de novo.
+Os valores esperados estão nas seções 11 (Ceará), 12 (comparação) e 13 (máxima verossimilhança) do notebook. Para recomeçar do zero, apague `data/` e `notebook_output/` e execute tudo de novo.
+
+### Gerar o PDF do artigo
+
+O artigo é escrito em [Typst](https://typst.app/) e usa as figuras de `notebook_output/`, então o notebook precisa ter sido executado antes. Na raiz do projeto:
+
+```bash
+uvx --from typst python -c "import typst; typst.compile('artigo/artigo.typ', output='pdfs/entrega/trabalho_zipf_ceara_davipassos_v2.pdf', root='.')"
+```
 
 ## Limitações
 
 - A unidade de análise é o município, que inclui áreas rurais e não coincide com a mancha urbana nem com a região metropolitana funcional.
 - Só o Censo de 2022 é usado, então não é possível saber se a concentração aumentou ou diminuiu ao longo do tempo.
 - O resultado depende do número de cidades incluídas, como mostra a diferença entre os 184 municípios e os 20 maiores.
+- A distribuição log-normal, alternativa à lei de potência, não foi testada.
 
 ## Referências
 
+- CLAUSET, A.; SHALIZI, C. R.; NEWMAN, M. E. J. Power-law distributions in empirical data. *SIAM Review*, v. 51, n. 4, p. 661-703, 2009. https://doi.org/10.1137/070710111
+- EECKHOUT, J. Gibrat's law for (all) cities. *American Economic Review*, v. 94, n. 5, p. 1429-1451, 2004. https://doi.org/10.1257/0002828043052303
 - GABAIX, X. Zipf's law for cities: an explanation. *The Quarterly Journal of Economics*, v. 114, n. 3, p. 739-767, 1999. https://doi.org/10.1162/003355399556133
+- GABAIX, X.; IBRAGIMOV, R. Rank − 1/2: a simple way to improve the OLS estimation of tail exponents. *Journal of Business & Economic Statistics*, v. 29, n. 1, p. 24-39, 2011. https://doi.org/10.1198/jbes.2009.06157
 - IBGE. *Censo Demográfico 2022: população residente, variação absoluta e taxa de crescimento geométrico*. SIDRA, tabela 4709, 2023. https://sidra.ibge.gov.br/tabela/4709
+- NEWMAN, M. E. J. Power laws, Pareto distributions and Zipf's law. *Contemporary Physics*, v. 46, n. 5, p. 323-351, 2005. https://doi.org/10.1080/00107510500052444
+- SIMON, H. A. On a class of skew distribution functions. *Biometrika*, v. 42, n. 3/4, p. 425-440, 1955. https://doi.org/10.2307/2333389
 - SOO, K. T. Zipf's law for cities: a cross-country investigation. *Regional Science and Urban Economics*, v. 35, n. 3, p. 239-263, 2005. https://doi.org/10.1016/j.regsciurbeco.2004.04.004
 - ZIPF, G. K. *Human behavior and the principle of least effort*. Cambridge: Addison-Wesley, 1949.
