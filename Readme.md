@@ -104,6 +104,15 @@ uv run --with nbconvert --with nbclient jupyter nbconvert --to notebook --execut
 uvx --from typst python -c "import typst; typst.compile('artigo/artigo_v5.typ', output='pdfs/entrega/trabalho_zipf_ceara_davipassos_v5.pdf', root='.')"
 ```
 
+## Versão 5.3: impactos no território
+
+A seção 17 do notebook `Lei_de_Zipf_Ceara_v5.ipynb` mede a falta de cidades médias em municípios, habitantes e distância. O artigo `artigo/artigo_v5_v3.typ` (PDF: `pdfs/entrega/trabalho_zipf_ceara_davipassos_v5_v3.pdf`, 6 páginas) incorpora esses resultados.
+
+- A hierarquia se interrompe por volta de 85 mil habitantes: 14 municípios estão entre 70 mil e 85 mil, e só 2 entre 85 mil e 130 mil.
+- As posições 2 a 14 somam de 200 mil a 740 mil habitantes a menos do que o previsto, conforme o modelo.
+- Cerca de 1,29 milhão de cearenses (14,7%) vivem a mais de 100 km de um município com 100 mil habitantes; com polos a partir de 80 mil, são 4,5%.
+- A distância é em linha reta, e os dados não medem acesso a serviços.
+
 ## Estrutura do projeto
 
 ```
