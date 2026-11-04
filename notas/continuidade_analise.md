@@ -100,3 +100,13 @@ Arquivos novos: `Lei_de_Zipf_Ceara_v5.ipynb` (v4 + seções 15 e 16), saídas em
 - **Também corrigido:** a v4 chama Maranguape de "vizinho da capital". A v5.2 diz que o Ceará tem quatro municípios ≥ 100 mil na Região Metropolitana de Fortaleza.
 - **Conferir ainda:** a busca confirmou Cabo de Santo Agostinho, Camaragibe e Igarassu na Região Metropolitana do Recife, mas não trouxe a lista completa. Falta conferir Jaboatão dos Guararapes, Olinda, Paulista e São Lourenço da Mata na LC 382/2018 de Pernambuco.
 
+## Versão 5.3 (4/11/2026): impactos no território
+
+Seção 17 acrescentada ao fim de `Lei_de_Zipf_Ceara_v5.ipynb`, sem alterar as saídas anteriores (hashes conferidos), mais `artigo/artigo_v5_v3.typ` e o PDF v5_v3, com 6 páginas. Figura nova: `notebook_output/v5/figura_distancia_ceara.png`.
+
+- **Onde começa:** acima de 70 mil, 23 observados e 21 previstos; acima de 85 mil, 9 observados e 16 ou 17 previstos. Nos dois modelos, a falta vai de 85 mil a cerca de 150 mil; acima de 200 mil, só a lei de potência a indica. A faixa cinza da figura v5 (100 mil a 400 mil) segue a lei de potência; a legenda da v5_v3 explica isso.
+- **Tamanho:** a lacuna das posições 2 a 14 vai de 203 mil (log-normal) a 743 mil (lei de potência). Não citar só o valor maior.
+- **Distância:** 14,7% dos cearenses a mais de 100 km de um município com 100 mil, contra 7,4% em Pernambuco. Com polos a partir de 150 mil: 15,9% e 13,2%. A partir de 80 mil: 4,5% e 1,7%. "O dobro de Pernambuco" só vale para o limite de 100 mil.
+- **Simulação:** Quixeramobim, Crateús, Iguatu e Quixadá reduziriam a população a mais de 100 km de 1,29 milhão para 160 mil. Não é previsão; o limite de 100 mil é arbitrário.
+- **Correção de recomendação:** a v5_v3 deixa de citar Juazeiro do Norte, Crato e Sobral, que já passam de 100 mil, como prioridade.
+
