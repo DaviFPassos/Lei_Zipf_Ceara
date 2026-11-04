@@ -84,6 +84,26 @@ uv run --with nbconvert --with nbclient jupyter nbconvert --to notebook --execut
 uvx --from typst python -c "import typst; typst.compile('artigo/artigo_v4.typ', output='pdfs/entrega/trabalho_zipf_ceara_davipassos_v4.pdf', root='.')"
 ```
 
+## Versão 5: artigo de 3 páginas na sequência de Newman (2005)
+
+O notebook `Lei_de_Zipf_Ceara_v5.ipynb` contém as seções da versão 4 e duas seções novas. A seção 15 compara a lei de potência com a log-normal truncada pelo teste da razão de verossimilhança (Clauset, Shalizi e Newman, 2009) e testa a aderência da log-normal por bootstrap. A seção 16 gera a figura única do artigo `artigo/artigo_v5.typ` (PDF: `pdfs/entrega/trabalho_zipf_ceara_davipassos_v5.pdf`, 3 páginas), organizado em medir, estimar, testar e interpretar. As saídas vão para `notebook_output/v5/`.
+
+| Ceará, cauda acima de 15.157 hab. | Lei de potência | Log-normal truncada |
+|---|---:|---:|
+| *p* de aderência (bootstrap) | 0,033 | 0,318 |
+| Razão de verossimilhança 𝓡 (*p* de Vuong) | −0,89 (0,584) | |
+| Municípios ≥ 100 mil previstos (observados: 8) | 14,0 | 13,1 |
+| *p* de falta de cidades médias (binomial) | 0,051 | 0,083 |
+| P(maior ≥ Fortaleza) | 0,281 | 0,050 |
+
+A falta de cidades médias aparece nos dois modelos. Já o tamanho de Fortaleza só é anômalo pela log-normal, e os dados não distinguem os dois modelos. Nos outros oito estados do Nordeste, o ajuste da log-normal converge para a própria lei de potência. Para reproduzir (cerca de 1 minuto):
+
+```bash
+uv run --with nbconvert --with nbclient jupyter nbconvert --to notebook --execute --inplace \
+    --ExecutePreprocessor.timeout=1800 Lei_de_Zipf_Ceara_v5.ipynb
+uvx --from typst python -c "import typst; typst.compile('artigo/artigo_v5.typ', output='pdfs/entrega/trabalho_zipf_ceara_davipassos_v5.pdf', root='.')"
+```
+
 ## Estrutura do projeto
 
 ```
