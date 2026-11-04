@@ -73,3 +73,13 @@ Mesma conta para os outros estados (P(maior ≥ observado)): BA 0,15; SP 0,82; R
 - **Erro de arredondamento na `main`:** o p de São Paulo (20 maiores, erro de Gabaix-Ibragimov) é 0,659, não 0,661, no artigo v2 e no README. Já está corrigido na `test`; se não houver merge, corrigir na `main` separadamente.
 - **Referências acrescentadas** que convém conferir (DOIs): Clauset et al. (2009), Gabaix e Ibragimov (2011), Simon (1955), Eeckhout (2004); Auerbach (1913) citado como "apud Newman".
 - **Figuras:** com oito estados, cores diferentes não se distinguem numa mesma área de gráfico; por isso o Ceará aparece em destaque e os demais em cinza com rótulo. Manter esse padrão se o número de estados crescer.
+
+## Versão 4 (3/11/2026): os nove estados do Nordeste
+
+Arquivos novos, sem alterar os anteriores: `Lei_de_Zipf_Nordeste_v4.ipynb`, saídas em `notebook_output/v4/`, `artigo/artigo_v4.typ` e `pdfs/entrega/trabalho_zipf_ceara_davipassos_v4.pdf` (7 páginas). O item 5 dos próximos passos foi resolvido em favor do Nordeste, e o item 1 e a reescrita da frase sobre planejamento foram aplicados na v4 (o artigo v3 continua com o texto antigo).
+
+- **Correção sobre Fortaleza aplicada:** a seção 14 do notebook calcula P(maior ≥ observado), a mediana esperada do maior, P(razão 1ª/2ª ≥ observada) = r^(−(α−1)) e o teste binomial dos municípios acima de 100 mil. O texto agora fala em "falta de cidades médias", não em capital grande demais.
+- **Resultados que se sustentam no Nordeste:** o Ceará é o único dos nove estados com a lei de potência rejeitada (p = 0,033; os outros têm p ≥ 0,18) e tem o α mais baixo da região (2,18; os outros vão de 2,21 a 2,50, todos acima de 2). Nenhuma capital é anômala (P entre 0,10 e 0,42). A falta de cidades médias só é quase significativa no Ceará (p = 0,051; os outros têm p ≥ 0,31).
+- **Contraponto novo, Pernambuco:** tem 185 municípios e 9,06 milhões de habitantes, mas 12 municípios acima de 100 mil (14,2 previstos), 8 deles na Região Metropolitana do Recife. Parte da diferença com o Ceará pode vir da divisão municipal das metrópoles. Isso reforça a ideia de usar os arranjos populacionais do IBGE. Conferir a lista de municípios da RMR antes da entrega final.
+- **Ainda pendente:** teste log-normal, reorganização na sequência do Newman e redução para 3 páginas.
+

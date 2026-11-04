@@ -61,6 +61,29 @@ A seção 13 do notebook segue as recomendações de Newman (2005): estima o exp
 
 O Ceará é o único dos oito estados em que o expoente é compatível com Zipf, mas a lei de potência é rejeitada (*p* = 0,033), e o que tem a maior falta relativa de cidades médias: 8 municípios acima de 100 mil habitantes, onde o ajuste prevê 14. Com o erro padrão corrigido, nenhum estado rejeita *q* = 1 entre os 20 maiores. A lei de potência é plausível na Bahia, no Rio de Janeiro, em Minas Gerais, no Paraná e em Santa Catarina, e rejeitada em São Paulo e no Rio Grande do Sul. No Rio de Janeiro, a cauda tem só 26 municípios, e o teste tem pouco poder.
 
+## Versão 4: comparação com os nove estados do Nordeste
+
+O notebook `Lei_de_Zipf_Nordeste_v4.ipynb` repete o estudo do Ceará e o compara com os outros oito estados do Nordeste (MA, PI, RN, PB, PE, AL, SE e BA). As versões anteriores não foram alteradas. A v4 também traz uma seção nova (14), que calcula a distribuição do maior município numa lei de potência (Newman, 2005, seção III.B), a probabilidade da razão 1ª/2ª e um teste binomial para o número de municípios acima de 100 mil habitantes. As saídas vão para `notebook_output/v4/` e o artigo está em `artigo/artigo_v4.typ` (PDF: `pdfs/entrega/trabalho_zipf_ceara_davipassos_v4.pdf`).
+
+| Resultado | MA | PI | CE | RN | PB | PE | AL | SE | BA |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Municípios | 217 | 224 | 184 | 167 | 223 | 185 | 102 | 75 | 417 |
+| Participação da maior cidade | 15,3% | 26,5% | 27,6% | 22,7% | 21,0% | 16,4% | 30,6% | 27,3% | 17,1% |
+| Razão 1ª/2ª | 3,80 | 5,34 | 6,83 | 2,84 | 1,99 | 2,31 | 4,08 | 3,13 | 3,92 |
+| α (máxima verossimilhança) | 2,48 | 2,24 | 2,18 | 2,24 | 2,49 | 2,21 | 2,50 | 2,33 | 2,44 |
+| *p* de aderência (bootstrap) | 0,690 | 0,885 | 0,033 | 0,900 | 0,435 | 0,836 | 0,180 | 0,926 | 0,728 |
+| P(maior ≥ observado) | 0,231 | 0,209 | 0,281 | 0,284 | 0,129 | 0,416 | 0,101 | 0,234 | 0,153 |
+| Municípios ≥ 100 mil, previstos / observados | 8,3 / 10 | 3,4 / 2 | 14,0 / 8 | 4,0 / 4 | 3,2 / 4 | 14,2 / 12 | 3,1 / 2 | 2,9 / 4 | 16,4 / 18 |
+| *p* de falta (binomial) | 0,793 | 0,337 | 0,051 | 0,623 | 0,778 | 0,316 | 0,384 | 0,840 | 0,722 |
+
+O Ceará tem o α mais próximo de 2 na região e é o único estado do Nordeste em que a lei de potência é rejeitada. Nenhuma capital é anômala pela lei ajustada; o que distingue o Ceará é a falta de cidades médias (8 municípios acima de 100 mil, onde a lei prevê 14). Para reproduzir:
+
+```bash
+uv run --with nbconvert --with nbclient jupyter nbconvert --to notebook --execute --inplace \
+    --ExecutePreprocessor.timeout=1200 Lei_de_Zipf_Nordeste_v4.ipynb
+uvx --from typst python -c "import typst; typst.compile('artigo/artigo_v4.typ', output='pdfs/entrega/trabalho_zipf_ceara_davipassos_v4.pdf', root='.')"
+```
+
 ## Estrutura do projeto
 
 ```
