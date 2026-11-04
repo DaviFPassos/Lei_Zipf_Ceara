@@ -83,3 +83,12 @@ Arquivos novos, sem alterar os anteriores: `Lei_de_Zipf_Nordeste_v4.ipynb`, saí
 - **Contraponto novo, Pernambuco:** tem 185 municípios e 9,06 milhões de habitantes, mas 12 municípios acima de 100 mil (14,2 previstos), 8 deles na Região Metropolitana do Recife. Parte da diferença com o Ceará pode vir da divisão municipal das metrópoles. Isso reforça a ideia de usar os arranjos populacionais do IBGE. Conferir a lista de municípios da RMR antes da entrega final.
 - **Ainda pendente:** teste log-normal, reorganização na sequência do Newman e redução para 3 páginas.
 
+## Versão 5 (3/11/2026): artigo de 3 páginas e teste log-normal
+
+Arquivos novos: `Lei_de_Zipf_Ceara_v5.ipynb` (v4 + seções 15 e 16), saídas em `notebook_output/v5/`, `artigo/artigo_v5.typ` e o PDF v5, com 3 páginas (as referências ocupam o início da terceira). O artigo segue a ordem do Newman: medir, estimar, testar e interpretar. Tem uma figura, com (a) a distribuição cumulativa do Ceará e as três distribuições ajustadas e (b) o α dos nove estados, e uma tabela.
+
+- **Log-normal no Ceará:** ajuste próprio (μ = 5,92; σ = 2,11), plausível (p = 0,32). A razão de verossimilhança não a distingue da lei de potência (𝓡 = −0,89; p = 0,58).
+- **Log-normal nos outros oito estados:** o ajuste degenera para a lei de potência (μ → −∞), com 𝓡 ≈ 0. O critério usado para marcar o ajuste como degenerado é a mediana e^μ abaixo de 1 habitante.
+- **Mudança na narrativa:** a falta de cidades médias vale nos dois modelos (14,0 e 13,1 previstos, contra 8 observados). Já a anomalia de Fortaleza depende do modelo: P = 0,28 pela lei de potência e 0,05 pela log-normal. O texto v5 diz isso; o v4 ainda afirma, sem ressalva, que Fortaleza não é anômala.
+- **Ainda pendente:** arranjos populacionais do IBGE (resolveriam a dúvida levantada por Pernambuco), teste de Gibrat com os censos de 2010 e 2022 e conferência da lista da Região Metropolitana do Recife.
+
