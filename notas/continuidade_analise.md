@@ -92,3 +92,11 @@ Arquivos novos: `Lei_de_Zipf_Ceara_v5.ipynb` (v4 + seções 15 e 16), saídas em
 - **Mudança na narrativa:** a falta de cidades médias vale nos dois modelos (14,0 e 13,1 previstos, contra 8 observados). Já a anomalia de Fortaleza depende do modelo: P = 0,28 pela lei de potência e 0,05 pela log-normal. O texto v5 diz isso; o v4 ainda afirma, sem ressalva, que Fortaleza não é anômala.
 - **Ainda pendente:** arranjos populacionais do IBGE (resolveriam a dúvida levantada por Pernambuco), teste de Gibrat com os censos de 2010 e 2022 e conferência da lista da Região Metropolitana do Recife.
 
+## Versão 5.2 (4/11/2026): artigo de 5 páginas
+
+`artigo/artigo_v5_v2.typ` e `pdfs/entrega/trabalho_zipf_ceara_davipassos_v5_v2.pdf` estendem o artigo v5 com resumo, mapa do Ceará, tabela dos nove estados, interpretação e limitações completas. Usa as saídas do notebook v5, que não mudou.
+
+- **Erro corrigido só na v5.2:** os textos v4 e v5 dizem que a curva cearense "volta à reta em Fortaleza". Fortaleza fica cerca de 3 vezes acima da lei ajustada (observado/ajustado = 3,03), e os municípios entre 75 mil e 356 mil ficam abaixo.
+- **Também corrigido:** a v4 chama Maranguape de "vizinho da capital". A v5.2 diz que o Ceará tem quatro municípios ≥ 100 mil na Região Metropolitana de Fortaleza.
+- **Conferir ainda:** a busca confirmou Cabo de Santo Agostinho, Camaragibe e Igarassu na Região Metropolitana do Recife, mas não trouxe a lista completa. Falta conferir Jaboatão dos Guararapes, Olinda, Paulista e São Lourenço da Mata na LC 382/2018 de Pernambuco.
+
