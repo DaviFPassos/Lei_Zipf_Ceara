@@ -1,0 +1,150 @@
+// Artigo da disciplina Ciência de Dados Aplicada à Ciência das Cidades, versão 6 (3 páginas).
+// Condensa o artigo_v5_v3.typ para o limite do manual: sem o mapa e a regressão da antiga Figura 1 e sem a tabela dos estados do Nordeste (resumida em texto). Todos os números vêm do notebook Lei_de_Zipf_Ceara_v5.ipynb.
+// Para compilar, a partir da raiz do projeto (depois de executar o notebook):
+//   uvx --from typst python -c "import typst; typst.compile('artigo/artigo_v6.typ', output='pdfs/entrega/trabalho_zipf_ceara_davipassos_v6.pdf', root='.')"
+
+#set document(title: "A distribuição populacional dos municípios cearenses segue a Lei de Zipf?", author: "Davi Passos")
+#set page(paper: "a4", margin: (x: 1.8cm, y: 1.5cm), numbering: "1")
+#set text(font: "Libertinus Serif", size: 10pt, lang: "pt", region: "br")
+#set par(justify: true, leading: 0.55em, spacing: 0.7em, first-line-indent: (amount: 1.2em, all: true))
+#set heading(numbering: "1.")
+#show heading: set text(size: 10.5pt)
+#show heading: set block(above: 1em, below: 0.6em)
+#show figure.where(kind: table): set figure.caption(position: top)
+#show figure.caption: set text(size: 9pt)
+#show figure: set block(above: 0.9em, below: 0.9em)
+#set figure(placement: auto)
+#set table(stroke: none, inset: (x: 4pt, y: 2.5pt))
+#show table: set text(size: 9pt, hyphenate: false)
+#show table: set par(justify: false)
+#set math.equation(numbering: "(1)")
+
+// Linhas horizontais no estilo booktabs.
+#let topo = table.hline(stroke: 0.8pt)
+#let meio = table.hline(stroke: 0.4pt)
+#let fonte(corpo) = align(left, block(text(size: 8.5pt)[#set par(first-line-indent: 0em); Fonte: #corpo]))
+
+#align(center)[
+  #text(size: 14pt, weight: "bold")[A distribuição populacional dos municípios cearenses segue a Lei de Zipf?]
+  #v(0.3em)
+  Davi Passos \
+  #text(size: 9pt)[Universidade de Fortaleza | Mestrado em Ciência da Computação | Ciência de Dados Aplicada à Ciência das Cidades]
+]
+
+#v(0.4em)
+#block(inset: (x: 1em))[
+  #set par(first-line-indent: 0em)
+  #set text(size: 9.5pt)
+  *Resumo.* Este trabalho investiga se a população dos 184 municípios do Ceará segue a Lei de Zipf, com dados do Censo Demográfico 2022 e na sequência proposta por Newman (2005): medir, estimar, testar e interpretar. A regressão rank-size resulta em $q$ = 0,90 e a máxima verossimilhança, em $alpha$ = 2,18 ± 0,10, compatíveis com a Lei de Zipf ($q = 1$, $alpha = 2$). Mesmo assim, o teste de aderência rejeita a lei de potência ($p$ = 0,03), algo que só ocorre no Ceará entre os nove estados do Nordeste. O resultado que não depende do modelo é a falta de cidades médias: há 8 municípios com mais de 100 mil habitantes, onde os modelos preveem 13 ou 14, e 1,29 milhão de cearenses vivem a mais de 100 km de um município com 100 mil habitantes. O tamanho de Fortaleza é compatível com a lei de potência ($p$ = 0,28).
+
+  *Palavras-chave:* Lei de Zipf; lei de potência; log-normal; hierarquia urbana; Ceará.
+]
+
+= Qual é o problema?
+
+O tamanho das cidades não tem um valor típico, como a altura das pessoas: num mesmo estado convivem uma metrópole e municípios com poucos milhares de habitantes. Newman (2005) mostra que a fração de cidades com população $x$ segue aproximadamente uma lei de potência, $p(x) = C x^(-alpha)$, regularidade notada por Auerbach em 1913 (apud NEWMAN, 2005) e popularizada por Zipf (1949) na forma de ranking: ordenadas da maior para a menor, as cidades seguem $P_r prop r^(-q)$, com $q approx 1$. Pela forma estrita, a segunda cidade teria metade da população da primeira, a terceira um terço, e assim por diante. As duas formulações são equivalentes, porque o gráfico de posição contra tamanho é a distribuição cumulativa com os eixos trocados (NEWMAN, 2005, Apêndice A):
+
+$ q = 1 / (alpha - 1) quad <==> quad alpha = 1 + 1/q, $ <eq:relacao>
+
+e a Lei de Zipf estrita corresponde a $alpha = 2$. A explicação mais aceita é o crescimento proporcional (SIMON, 1955; GABAIX, 1999), mas a forma estrita é rejeitada em muitos países e o resultado depende da definição de cidade e do estimador (SOO, 2005).
+
+*Este trabalho pergunta se a população dos 184 municípios do Ceará, rede dominada por Fortaleza, segue a Lei de Zipf, e se o padrão cearense é atípico no Nordeste.* A questão importa para o planejamento: serviços especializados, como hospitais de alta complexidade e universidades, dependem de uma população mínima, então a forma da hierarquia urbana influencia onde a demanda se concentra e quanto a população precisa se deslocar. Zipf não indica uma distribuição ideal, mas oferece um padrão de comparação para medir desvios. Há também uma armadilha de método: ajustar uma reta por mínimos quadrados ao gráfico log-log produz estimativas enviesadas e incertezas pequenas demais, e um $R^2$ alto não prova uma lei de potência (NEWMAN, 2005; CLAUSET; SHALIZI; NEWMAN, 2009). Por isso, a análise segue a sequência de Newman.
+
+= O que foi feito?
+
+Foram usados os dados de população residente do Censo 2022 (IBGE, SIDRA, tabela 4709) para os 184 municípios do Ceará e, para comparação, para os 1.794 municípios dos nove estados do Nordeste (54,7 milhões de habitantes), região cujos estados têm povoamento e economia mais parecidos e cujo conjunto não depende de escolha do autor. O processamento foi feito em Python (pandas, NumPy, SciPy, Matplotlib), num notebook que reproduz os números e as figuras.
+
+*Medir.* A distribuição é representada pela função cumulativa complementar $P(X >= x)$ em escala log-log, que não depende de intervalos, ao contrário do histograma.
+
+*Estimar.* Como referência, fez-se a regressão de $log_10 P_r$ sobre $log_10 r$, com todos os municípios e com os 20 maiores, testando $q = 1$ com o erro usual e com o erro $q sqrt(2 slash n)$ de Gabaix e Ibragimov (2011), necessário porque os pontos de um ranking não são independentes. O método principal é a máxima verossimilhança (NEWMAN, 2005, Eq. 5 e 6),
+
+$ hat(alpha) = 1 + n [sum_(i=1)^n ln(x_i / x_min)]^(-1), quad quad sigma = (hat(alpha) - 1) / sqrt(n), $ <eq:mv>
+
+aplicada aos $n$ municípios com pelo menos $x_min$ habitantes, porque a lei de potência costuma valer apenas na cauda. O $x_min$ minimiza a distância de Kolmogorov-Smirnov entre a distribuição empírica e a ajustada, com pelo menos 10 municípios na cauda (CLAUSET; SHALIZI; NEWMAN, 2009).
+
+*Testar.* A aderência foi avaliada por bootstrap paramétrico com 1.000 amostras: $p < 0,1$ indica que a lei de potência não é plausível. A log-normal, também compatível com crescimento proporcional (EECKHOUT, 2004), foi ajustada à mesma cauda, truncada em $x_min$, e comparada pela razão de log-verossimilhança $cal(R)$ com o $p$ de Vuong ($cal(R) > 0$ favorece a lei de potência). Quando a mediana da log-normal ajustada fica abaixo de 1 habitante, ela degenerou para o limite em que se confunde com uma lei de potência, e o teste não informa nada.
+
+*Interpretar.* Um ponto acima da reta não basta para chamar a capital de anômala, porque o maior valor de uma cauda pesada varia muito. Se os $n$ municípios da cauda seguem a lei ajustada, $P("maior" >= x) = 1 - [1 - (x slash x_min)^(-(alpha - 1))]^n$ (NEWMAN, 2005, seção III.B), e o número de municípios acima de 100 mil habitantes segue uma binomial com $n$ tentativas e probabilidade $(10^5 slash x_min)^(-(alpha - 1))$. O cálculo foi repetido com a log-normal. Para medir o impacto, comparou-se o número previsto de municípios ao observado em vários limites de população, calculou-se a distância em linha reta até o município mais próximo com pelo menos 100 mil habitantes (em qualquer estado do Nordeste) e simulou-se quais cidades de 70 mil a 100 mil habitantes mais reduziriam a população a mais de 100 km se passassem desse limite.
+
+= Quais são os resultados e as conclusões?
+
+== Inclinação e forma
+
+Em 2022, Fortaleza tinha 2.428.708 habitantes, 27,6% do estado e 6,83 vezes a população de Caucaia, a segunda (355.679). A regressão com os 184 municípios resulta em $q$ = 0,901 e $R^2$ = 0,940. Pelo erro usual, o intervalo de 95% (0,868 a 0,935) rejeita a Lei de Zipf ($p < 0,001$); com o erro de Gabaix e Ibragimov, vai de 0,72 a 1,09 e inclui 1 ($p$ = 0,29). Entre os 20 maiores, $q$ = 0,988. A máxima verossimilhança escolhe $x_min$ = 15.157 habitantes, com 129 municípios na cauda, e estima $alpha$ = 2,18 ± 0,10 ($q$ = 0,85 pela @eq:relacao); $alpha = 2$ não é rejeitado ($p$ = 0,089). Os dois métodos concordam: a inclinação é compatível com a de Zipf.
+
+Isso não garante a forma. O bootstrap rejeita a lei de potência ($p$ = 0,033). Na @fig:principal(a), os pontos acompanham a reta até cerca de 70 mil habitantes, ficam abaixo dela daí até Caucaia, e Fortaleza fica cerca de três vezes acima. A log-normal truncada, que se curva para baixo, acompanha melhor esse trecho e é plausível ($p$ = 0,32), mas a razão de verossimilhança não distingue os dois modelos ($cal(R)$ = −0,89; $p$ = 0,58), como mostra a @tab:ceara.
+
+#figure(
+  image("../notebook_output/v5/figura_artigo_v5.png", width: 94%),
+  caption: [(a) Distribuição cumulativa complementar das populações municipais do Ceará em 2022, com a lei de potência de máxima verossimilhança, a Lei de Zipf ($alpha = 2$) e a log-normal truncada, ajustadas à cauda acima de $x_min$ (linha pontilhada vertical). A faixa cinza marca 100 mil a 400 mil habitantes, onde os pontos ficam abaixo da lei de potência. (b) Expoente $alpha$ nos nove estados do Nordeste por máxima verossimilhança (com intervalo de 95%) e pela regressão com todos os municípios ($alpha = 1 + 1 slash q$). Fonte: elaboração própria com dados do IBGE.],
+) <fig:principal>
+
+#figure(
+  [#table(
+    columns: (1fr, auto, auto),
+    align: (left, right, right),
+    topo,
+    table.header([*Teste na cauda cearense*], [*Lei de potência*], [*Log-normal truncada*]),
+    meio,
+    [$p$ de aderência (bootstrap)], [0,033], [0,318],
+    [Razão de verossimilhança $cal(R)$ ($p$ de Vuong)], table.cell(colspan: 2, align: center)[−0,89 (0,584)],
+    [Municípios ≥ 100 mil previstos (observados: 8)], [14,0], [13,1],
+    [$p$ de falta de cidades médias (binomial)], [0,051], [0,083],
+    [$P$(maior ≥ Fortaleza)], [0,281], [0,050],
+    topo,
+  )
+  #fonte[elaboração própria com dados do IBGE.]],
+  kind: table,
+  caption: [Lei de potência e log-normal na cauda cearense ($x >=$ 15.157 habitantes, 129 municípios).],
+) <tab:ceara>
+
+== Faltam cidades médias; o tamanho de Fortaleza depende do modelo
+
+Pela lei de potência ajustada, a mediana esperada do maior município é 1,29 milhão, e a probabilidade de ele ter 2,43 milhões ou mais é 0,28; a razão de 6,83 entre os dois primeiros também não é significativa ($p$ = 0,10). Pela log-normal, de cauda mais leve, a probabilidade cai para 0,05. Como os dados não distinguem os modelos, não se pode afirmar que Fortaleza é grande demais, nem descartar essa hipótese. O resultado que não depende do modelo está abaixo da capital: a lei de potência prevê 14 e a log-normal 13 municípios com mais de 100 mil habitantes, e o Ceará tem 8 ($p$ = 0,051 e 0,083).
+
+A falta tem um início definido. Acima de 70 mil habitantes, o número de municípios é o previsto (23 observados, 21 nos dois modelos). Acima de 85 mil, há 9, onde os modelos preveem 16 ou 17: são 14 municípios entre 70 mil e 85 mil e só 2 entre 85 mil e 130 mil (Iguatu e Maranguape). O tamanho da lacuna depende do modelo, mas não sua existência.
+
+== Comparação com o Nordeste
+
+Nos nove estados, $hat(alpha)$ vai de 2,18 (Ceará, o mais próximo de Zipf) a 2,50 (Alagoas), sempre acima de 2 (@fig:principal(b)): na região, as cidades grandes são mais raras em relação às médias do que a lei estrita prevê. O Ceará tem a maior razão entre os dois primeiros municípios (6,83, seguido do Piauí, com 5,34), mas é único em três aspectos. A lei de potência é plausível em todos os outros estados ($p$ de aderência entre 0,18 e 0,93), e neles o ajuste da log-normal converge para a própria lei, de modo que o teste não acrescenta informação. Nenhuma capital é anômala pela lei ajustada ($P$ entre 0,10 e 0,42). E a falta de cidades médias só se aproxima da significância no Ceará ($p$ = 0,051; nos demais, $p >= 0,31$), que tem a menor razão entre municípios observados e previstos acima de 100 mil habitantes (0,57). O método também muda as conclusões: com todos os municípios, o erro usual rejeita $q = 1$ em oito dos nove estados, e o erro de Gabaix e Ibragimov, só na Bahia.
+
+== O que a lacuna significa no território
+
+Cerca de 1,29 milhão de cearenses (14,7%), em 47 municípios, vivem a mais de 100 km de um município com 100 mil habitantes, concentrados no centro e no oeste (@fig:distancia(a)). A proporção é quase o dobro da de Pernambuco (7,4%), estado de população parecida. O número depende do limite: com polos a partir de 80 mil habitantes, cai para 4,5% no Ceará e 1,7% em Pernambuco, o que indica que o interior cearense tem cidades bem distribuídas, mas um degrau abaixo do porte médio. A simulação da @fig:distancia(b) mostra quais são elas: se Quixeramobim, Crateús, Iguatu e Quixadá, que juntas estão a 59 mil habitantes do limite, o ultrapassassem, a população a mais de 100 km cairia para cerca de 160 mil. A conta não é uma previsão, e o limite de 100 mil é arbitrário: Iguatu, com 98.064 habitantes, reduziria sozinha esse número em 330 mil com mais 1.936. Os dados não medem acesso a serviços, mas indicam onde investigar primeiro: nessas cidades, mais do que na capital.
+
+#figure(
+  image("../notebook_output/v5/figura_distancia_ceara.png", width: 58%),
+  caption: [(a) Distância em linha reta do centro de cada município do Ceará ao município mais próximo com pelo menos 100 mil habitantes, em qualquer estado do Nordeste. (b) Simulação da população a mais de 100 km se as cidades indicadas passassem de 100 mil habitantes, uma de cada vez, na ordem que mais reduz esse número. Fonte: elaboração própria com dados do IBGE.],
+) <fig:distancia>
+
+== Interpretação e limitações
+
+Pernambuco, que tem quase o mesmo número de municípios (185) e de habitantes (9,06 milhões), tem 12 acima de 100 mil, perto dos 14,2 previstos. Oito deles, porém, estão na Região Metropolitana do Recife, contra quatro do Ceará (Fortaleza, Caucaia, Maracanaú e Maranguape): parte da diferença pode vir da divisão das aglomerações em municípios, e não de uma diferença real na rede de cidades médias, e este trabalho não separa as duas explicações. Por isso, o município (que inclui áreas rurais) é a principal limitação, e os arranjos populacionais do IBGE seriam mais adequados, e os censos de 2010 e 2022 permitiriam testar o crescimento proporcional. Além disso, outras escolhas de $x_min$ mudam $alpha$; nos estados de cauda curta (27 municípios no Rio Grande do Norte, 34 em Sergipe) os testes têm pouco poder; os testes do maior município e das cidades médias usam parâmetros estimados com os mesmos dados; e as distâncias são em linha reta. A comparação vale para o Nordeste, não para o país.
+
+== Conclusão
+
+A população dos municípios cearenses segue a Lei de Zipf na inclinação ($alpha$ = 2,18 ± 0,10), mas não na forma: o Ceará é o único estado do Nordeste em que a lei de potência é rejeitada ($p$ = 0,03). O desvio tem lugar definido: acima de 70 mil habitantes o número de municípios é o previsto, e a hierarquia se interrompe por volta de 85 mil, com 8 municípios acima de 100 mil onde os modelos preveem 13 ou 14 ($p$ = 0,05 e 0,08, evidência moderada). O tamanho de Fortaleza, ao contrário, é compatível com a lei de potência. Essa interrupção tem expressão no território: 1,29 milhão de cearenses vivem a mais de 100 km de um município com 100 mil habitantes, e Quixeramobim, Crateús, Iguatu e Quixadá ocupam as posições mais estratégicas. O método foi decisivo: sozinha, a regressão tradicional, com $R^2$ = 0,94, não indicaria nenhum problema de forma. Ao seguir Newman (2005), troca-se a pergunta "a lei vale?" por uma mais útil para o planejamento: onde a rede urbana se afasta dela.
+
+#v(0.3em)
+#heading(numbering: none)[Referências]
+
+#set par(first-line-indent: 0em, hanging-indent: 1em, justify: false, spacing: 0.4em)
+#set text(size: 8.5pt)
+
+CLAUSET, A.; SHALIZI, C. R.; NEWMAN, M. E. J. Power-law distributions in empirical data. *SIAM Review*, v. 51, n. 4, p. 661-703, 2009. https://doi.org/10.1137/070710111.
+
+EECKHOUT, J. Gibrat's law for (all) cities. *American Economic Review*, v. 94, n. 5, p. 1429-1451, 2004. https://doi.org/10.1257/0002828043052303.
+
+GABAIX, X. Zipf's law for cities: an explanation. *The Quarterly Journal of Economics*, v. 114, n. 3, p. 739-767, 1999. https://doi.org/10.1162/003355399556133.
+
+GABAIX, X.; IBRAGIMOV, R. Rank − 1/2: a simple way to improve the OLS estimation of tail exponents. *Journal of Business & Economic Statistics*, v. 29, n. 1, p. 24-39, 2011. https://doi.org/10.1198/jbes.2009.06157.
+
+IBGE. *Censo Demográfico 2022: população residente, variação absoluta e taxa de crescimento geométrico*. SIDRA, tabela 4709, 2023. Disponível em: https://sidra.ibge.gov.br/tabela/4709. Acesso em: 3 nov. 2026.
+
+NEWMAN, M. E. J. Power laws, Pareto distributions and Zipf's law. *Contemporary Physics*, v. 46, n. 5, p. 323-351, 2005. https://doi.org/10.1080/00107510500052444.
+
+SIMON, H. A. On a class of skew distribution functions. *Biometrika*, v. 42, n. 3/4, p. 425-440, 1955. https://doi.org/10.2307/2333389.
+
+SOO, K. T. Zipf's law for cities: a cross-country investigation. *Regional Science and Urban Economics*, v. 35, n. 3, p. 239-263, 2005. https://doi.org/10.1016/j.regsciurbeco.2004.04.004.
+
+ZIPF, G. K. *Human behavior and the principle of least effort*. Cambridge: Addison-Wesley, 1949.
