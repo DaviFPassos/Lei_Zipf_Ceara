@@ -60,21 +60,21 @@ A pergunta tem uma armadilha de método. O procedimento mais comum, ajustar uma 
 
 Foram usados os dados de população residente do Censo Demográfico 2022 (IBGE, SIDRA, tabela 4709, variável 93) para os 184 municípios do Ceará e, para comparação, para os 1.794 municípios dos nove estados do Nordeste, que somam 54,7 milhões de habitantes. A região foi escolhida porque seus estados têm história de povoamento e economia mais parecidas entre si e porque o conjunto não depende de escolha do autor. Todo o processamento foi feito em Python (pandas, NumPy, SciPy e Matplotlib), num notebook que baixa os dados do IBGE e reproduz os números e as figuras deste texto.
 
-*Medir.* A distribuição foi representada pela função cumulativa complementar $P(X >= x)$ em escala log-log, que Newman recomenda no lugar do histograma por não depender da escolha de intervalos.
+*Medir.* Para cada tamanho $x$, calcula-se a fração de municípios com pelo menos $x$ habitantes, $P(X >= x)$, e o resultado é desenhado em escala log-log, onde uma lei de potência vira uma reta. Esse gráfico não depende da escolha de intervalos, ao contrário do histograma, e é o que Newman recomenda.
 
-*Estimar.* Como referência, foi feita a regressão tradicional de $log_10 P_r$ sobre $log_10 r$, com todos os municípios e com os 20 maiores. A hipótese $q = 1$ foi testada com o erro usual e com o erro $q sqrt(2 slash n)$ de Gabaix e Ibragimov (2011), necessário porque os pontos de um ranking não são independentes. O método principal é o estimador de máxima verossimilhança (NEWMAN, 2005, Eq. 5 e 6),
+*Estimar.* Como referência, ajustou-se a reta tradicional ao gráfico de posição contra tamanho (regressão de $log_10 P_r$ sobre $log_10 r$), com todos os municípios e com os 20 maiores, testando se $q = 1$ com o erro usual e com o erro $q sqrt(2 slash n)$ de Gabaix e Ibragimov (2011), que leva em conta que os pontos de um ranking não são independentes. O método principal é a máxima verossimilhança, que estima o expoente diretamente dos dados (NEWMAN, 2005, Eq. 5 e 6),
 
 $ hat(alpha) = 1 + n [sum_(i=1)^n ln(x_i / x_min)]^(-1), quad quad sigma = (hat(alpha) - 1) / sqrt(n), $ <eq:mv>
 
-aplicado só aos $n$ municípios com pelo menos $x_min$ habitantes, porque a lei de potência costuma valer apenas na cauda. O limite $x_min$ foi escolhido pelo critério de Clauset, Shalizi e Newman (2009): entre todas as populações observadas (com pelo menos 10 municípios na cauda), a que minimiza a distância de Kolmogorov-Smirnov entre a distribuição empírica e a ajustada.
+usando só os $n$ municípios com pelo menos $x_min$ habitantes, a cauda, porque a lei de potência costuma valer apenas para os valores grandes. O $x_min$ é o ponto de corte que deixa a curva ajustada mais próxima da real, medida pela distância de Kolmogorov-Smirnov, entre todas as populações observadas com pelo menos 10 municípios na cauda (CLAUSET; SHALIZI; NEWMAN, 2009).
 
-*Testar.* A aderência foi avaliada por bootstrap paramétrico com 1.000 amostras; $p < 0,1$ indica que a lei de potência não é plausível. A alternativa log-normal, também compatível com crescimento proporcional (EECKHOUT, 2004), foi ajustada à mesma cauda, truncada em $x_min$, e comparada pela razão de log-verossimilhança $cal(R)$, com o $p$ de Vuong; $cal(R) > 0$ favorece a lei de potência. Quando a mediana da log-normal ajustada fica abaixo de 1 habitante, o ajuste degenerou para o limite em que ela se confunde com uma lei de potência, e o teste não informa nada. Nos demais casos, a aderência da log-normal foi avaliada por bootstrap, com $x_min$ fixo.
+*Testar.* Para saber se a lei de potência é plausível, usou-se o bootstrap: simulam-se 1.000 estados que seguem exatamente a lei ajustada e vê-se se o Ceará real se parece com eles; $p < 0,1$ indica que não. A alternativa foi a log-normal, modelo com menos cidades gigantes e também compatível com crescimento proporcional (EECKHOUT, 2004), ajustada à mesma cauda, truncada em $x_min$, e comparada com a lei de potência pela razão de log-verossimilhança $cal(R)$ e pelo teste de Vuong ($cal(R) > 0$ favorece a lei de potência). Quando a mediana da log-normal ajustada fica abaixo de 1 habitante, ela se confunde com uma lei de potência, e o teste não informa nada. Nos demais casos, a log-normal também foi testada por bootstrap, com $x_min$ fixo.
 
-*Interpretar.* Um ponto acima da reta não basta para chamar a capital de anômala, porque o maior valor de uma distribuição de cauda pesada varia muito. Newman (2005, seção III.B) mostra que, se os $n$ municípios da cauda seguem a lei ajustada,
+*Interpretar.* Uma capital acima da reta não é, por si só, anômala, porque em uma lei de potência o maior valor varia muito de uma amostra para outra. Por isso, calculou-se a chance de, se os $n$ municípios da cauda seguissem a lei ajustada, o maior ser pelo menos tão grande quanto o observado (NEWMAN, 2005, seção III.B):
 
 $ P(text("maior") >= x) = 1 - [1 - (x / x_min)^(-(alpha - 1))]^n. $ <eq:maior>
 
-Pela mesma lei, a razão $R$ entre os dois maiores tem $P(R >= r) = r^(-(alpha - 1))$, e o número de municípios com mais de 100 mil habitantes segue uma distribuição binomial com $n$ tentativas e probabilidade $(10^5 slash x_min)^(-(alpha - 1))$. O mesmo cálculo foi repetido com a log-normal no Ceará.
+Pela mesma lei, calculou-se a chance de a razão $R$ entre os dois maiores ser tão alta quanto a observada, $P(R >= r) = r^(-(alpha - 1))$, e quantos municípios acima de 100 mil habitantes ela prevê (distribuição binomial com $n$ tentativas e probabilidade $(10^5 slash x_min)^(-(alpha - 1))$), para ver se ter tão poucos seria raro por acaso. O mesmo cálculo foi repetido com a log-normal no Ceará.
 
 *Medir o impacto.* Para saber o que o desvio significa na prática, o número de municípios previsto foi comparado ao observado em vários limites de população, e a soma das posições 2 a 14 foi comparada à prevista por cada modelo. Também se calculou a distância em linha reta do centro de cada município ao centro do município mais próximo com pelo menos 100 mil habitantes, em qualquer estado do Nordeste, e simulou-se quais cidades cearenses entre 70 mil e 100 mil habitantes mais reduziriam a população a mais de 100 km se passassem desse limite.
 
@@ -93,7 +93,7 @@ A regressão com os 184 municípios resulta em $q$ = 0,901 e $R^2$ = 0,940 (@fig
 
 == A forma: lei de potência ou log-normal?
 
-A inclinação compatível não garante a forma. O bootstrap rejeita a lei de potência ($p$ = 0,033). Na @fig:principal(a), os pontos acompanham a reta até cerca de 70 mil habitantes, ficam abaixo dela daí até Caucaia, e Fortaleza fica cerca de três vezes acima. A log-normal truncada, que se curva para baixo, acompanha melhor esse trecho e é plausível ($p$ = 0,32), mas a razão de verossimilhança não distingue os dois modelos ($cal(R)$ = −0,89; $p$ = 0,58). A @tab:ceara resume esses testes.
+A inclinação compatível não garante a forma. O bootstrap mostra que o Ceará real não se parece com uma lei de potência perfeita ($p$ = 0,033). Na @fig:principal(a), os pontos acompanham a reta até cerca de 70 mil habitantes, ficam abaixo dela daí até Caucaia, e Fortaleza fica cerca de três vezes acima. A log-normal truncada, que se curva para baixo, acompanha melhor esse trecho e é plausível ($p$ = 0,32), mas a comparação direta não consegue dizer qual dos dois modelos é melhor ($cal(R)$ = −0,89; $p$ = 0,58). A @tab:ceara resume esses testes.
 
 #figure(
   image("../notebook_output/v5/figura_artigo_v5.png", width: 100%),
@@ -108,10 +108,10 @@ A inclinação compatível não garante a forma. O bootstrap rejeita a lei de po
     table.header([*Teste na cauda cearense*], [*Lei de potência*], [*Log-normal truncada*]),
     meio,
     [$p$ de aderência (bootstrap)], [0,033], [0,318],
-    [Razão de verossimilhança $cal(R)$ ($p$ de Vuong)], table.cell(colspan: 2, align: center)[−0,89 (0,584)],
+    [Qual modelo é melhor? ($cal(R)$ e $p$ de Vuong)], table.cell(colspan: 2, align: center)[−0,89 (0,584)],
     [Municípios ≥ 100 mil previstos (observados: 8)], [14,0], [13,1],
-    [$p$ de falta de cidades médias (binomial)], [0,051], [0,083],
-    [$P$(maior ≥ Fortaleza)], [0,281], [0,050],
+    [$p$ da falta de cidades médias], [0,051], [0,083],
+    [Chance de o maior município ser ≥ Fortaleza], [0,281], [0,050],
     topo,
   )
   #fonte[elaboração própria com dados do IBGE.]],
@@ -119,11 +119,13 @@ A inclinação compatível não garante a forma. O bootstrap rejeita a lei de po
   caption: [Lei de potência e log-normal na cauda da distribuição cearense ($x >=$ 15.157 habitantes, 129 municípios).],
 ) <tab:ceara>
 
-== Faltam cidades médias; o tamanho de Fortaleza depende do modelo
+== Fortaleza e as cidades médias
 
-Pela lei de potência ajustada, a mediana esperada do maior município é 1,29 milhão, e a probabilidade de ele ter 2,43 milhões ou mais é 0,28 (@eq:maior); a razão de 6,83 entre os dois primeiros também não é significativa ($p$ = 0,10). Pela log-normal, cuja cauda é mais leve, a probabilidade cai para 0,05. Como os dados não distinguem os dois modelos, não é possível afirmar que Fortaleza é grande demais, nem descartar essa hipótese. O resultado que não depende do modelo está abaixo da capital: a lei de potência prevê 14 e a log-normal 13 municípios com mais de 100 mil habitantes, e o Ceará tem 8 ($p$ = 0,051 e 0,083).
+Fortaleza é grande demais? Uma lei de potência já admite uma cidade muito maior que as outras, então a pergunta é se 2,43 milhões de habitantes seria um valor raro. Pela lei de potência ajustada, não: a mediana esperada do maior município é 1,29 milhão, e em cerca de 28% dos estados simulados o maior é pelo menos tão grande quanto Fortaleza (@eq:maior); a razão de 6,83 entre os dois primeiros também não é significativa ($p$ = 0,10). Pela log-normal, que admite menos gigantes, a chance cai para 5%. Como os dados não permitem escolher entre os modelos, não se pode afirmar que Fortaleza é grande demais, nem descartar essa hipótese.
 
-A falta tem um início bem definido. Acima de 70 mil habitantes, o número de municípios é o previsto (23 observados, 21 nos dois modelos). Acima de 85 mil, há 9, onde os modelos preveem 16 ou 17: há 14 municípios entre 70 mil e 85 mil e só 2 entre 85 mil e 130 mil (Iguatu e Maranguape). Nos dois modelos, a falta vai até cerca de 150 mil (5 observados, 7 ou 9 previstos); acima de 200 mil, só a lei de potência a indica. As posições 2 a 14 somam 1,95 milhão de habitantes, de 200 mil a 740 mil a menos do que preveem a log-normal e a lei de potência, ou 2% a 8% da população do estado. O tamanho da lacuna depende, portanto, do modelo, mas não sua existência.
+O resultado que não depende do modelo está abaixo da capital. A lei de potência prevê 14 municípios com mais de 100 mil habitantes e a log-normal, 13; o Ceará tem 8, e ter tão poucos por acaso teria chance de 5% a 8% ($p$ = 0,051 e 0,083, evidência moderada).
+
+A falta tem início definido. Acima de 70 mil habitantes, o número de municípios é o previsto (23 observados, 21 nos dois modelos). Acima de 85 mil, há 9, onde os modelos preveem 16 ou 17: são 14 municípios de 70 mil a 85 mil e só 2 entre 85 mil e 130 mil (Iguatu e Maranguape). Nos dois modelos, a falta vai até cerca de 150 mil (5 observados, 7 ou 9 previstos); acima de 200 mil, só a lei de potência a indica. As posições 2 a 14 somam 1,95 milhão de habitantes, de 200 mil a 740 mil a menos do que preveem a log-normal e a lei de potência, ou 2% a 8% da população do estado. O tamanho da lacuna depende, portanto, do modelo, mas não sua existência.
 
 == Comparação com o Nordeste
 
@@ -154,13 +156,13 @@ A @tab:nordeste repete a análise nos nove estados. Na participação da maior c
   caption: [Concentração, expoente e testes da lei de potência nos estados do Nordeste em 2022.],
 ) <tab:nordeste>
 
-O caso cearense é único na região em três aspectos. A lei de potência é plausível em todos os outros estados ($p$ de aderência entre 0,18 e 0,93), e neles o ajuste da log-normal converge para a própria lei de potência, de modo que o teste não acrescenta informação. Nenhuma capital é anômala pela lei ajustada ($P$ entre 0,10 e 0,42). E a falta de cidades médias só se aproxima da significância no Ceará ($p$ = 0,051; nos demais, $p >= 0,31$), que tem a menor proporção entre municípios observados e previstos acima de 100 mil habitantes (0,57). Piauí e Alagoas têm proporções parecidas, mas com 2 municípios observados e 3 previstos, diferença que não se distingue do acaso.
+O caso cearense se destaca na região em três pontos. Primeiro, a lei de potência é plausível em todos os outros estados ($p$ de aderência entre 0,18 e 0,93), e neles o ajuste da log-normal se confunde com a própria lei, de modo que o teste não acrescenta informação. Segundo, nenhuma outra capital é anômala pela lei ajustada (a chance de ser tão grande por acaso vai de 0,10 a 0,42). Terceiro, só no Ceará a falta de cidades médias se aproxima de ser significativa ($p$ = 0,051; nos demais, $p >= 0,31$): ele tem a menor proporção entre municípios observados e previstos acima de 100 mil habitantes (0,57). Piauí e Alagoas têm proporções parecidas, mas com 2 municípios observados e 3 previstos, diferença que não se distingue do acaso.
 
 O método muda as conclusões. Com todos os municípios, o $q$ da regressão vai de 0,83 (Bahia) a 1,10 (Sergipe), e o erro usual rejeita $q = 1$ em oito dos nove estados; com o erro de Gabaix e Ibragimov, a rejeição a 5% fica só na Bahia. Entre os 20 maiores, o erro usual rejeita a lei no Maranhão ($p$ = 0,001), e o erro corrigido não a rejeita em nenhum estado ($p >= 0,55$).
 
 == O que a lacuna significa no território
 
-Cerca de 1,29 milhão de cearenses (14,7%), em 47 municípios, vivem a mais de 100 km de um município com 100 mil habitantes, concentrados no centro e no oeste do estado (@fig:distancia(a)). A proporção é quase o dobro da de Pernambuco (7,4%), estado de população parecida, mas menor que a do Piauí (50,5%), do Maranhão (26,9%) e da Bahia (24,4%), estados bem maiores. O número depende do limite usado: com polos a partir de 150 mil habitantes, a proporção é de 15,9% no Ceará e 13,2% em Pernambuco; com polos a partir de 80 mil, cai para 4,5% e 1,7%. O Ceará fica sempre acima de Pernambuco, e a queda para 4,5% é reveladora: o interior cearense tem cidades bem distribuídas, mas um degrau abaixo do porte médio.
+Cerca de 1,29 milhão de cearenses (14,7%), em 47 municípios, vivem a mais de 100 km de um município com 100 mil habitantes, concentrados no centro e no oeste do estado (@fig:distancia(a)). A proporção é quase o dobro da de Pernambuco (7,4%), estado de população parecida, mas menor que a do Piauí (50,5%), do Maranhão (26,9%) e da Bahia (24,4%), estados bem maiores. O número depende do limite usado: se ele fosse 150 mil habitantes, a proporção seria de 15,9% no Ceará e 13,2% em Pernambuco; se fosse 80 mil, cairia para 4,5% e 1,7%. O Ceará fica sempre acima de Pernambuco, e a queda para 4,5% é reveladora: o interior cearense tem cidades bem distribuídas, mas um degrau abaixo do porte médio.
 
 #figure(
   image("../notebook_output/v5/figura_distancia_ceara.png", width: 92%),
