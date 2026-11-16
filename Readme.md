@@ -31,34 +31,87 @@ O estudo investiga se a hierarquia populacional dos 184 municípios do Ceará se
 
 ## Comparação com outros estados
 
-A seção 12 do notebook repete o mesmo estudo para a Bahia, São Paulo e o Paraná, com os mesmos dados e o mesmo método.
+A seção 12 do notebook repete o mesmo estudo para sete estados do Nordeste, do Sudeste e do Sul (Bahia, São Paulo, Rio de Janeiro, Minas Gerais, Paraná, Santa Catarina e Rio Grande do Sul), com os mesmos dados e o mesmo método.
 
-| Resultado | Ceará | Bahia | São Paulo | Paraná |
-|---|---:|---:|---:|---:|
-| Municípios | 184 | 417 | 645 | 399 |
-| Participação da maior cidade | 27,6% | 17,1% | 25,8% | 15,5% |
-| Razão 1ª/2ª | 6,83 | 3,92 | 8,87 | 3,19 |
-| Gini | 0,617 | 0,584 | 0,802 | 0,709 |
-| *q* (todos) | 0,901 | 0,831 | 1,410 | 1,122 |
-| *q* (20 maiores) | 0,988 | 0,927 | 0,878 | 0,840 |
-| *p* do teste *q* = 1 (20 maiores) | 0,887 | 0,207 | 0,199 | 0,001 |
+| Resultado | CE | BA | SP | RJ | MG | PR | SC | RS |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Municípios | 184 | 417 | 645 | 92 | 853 | 399 | 295 | 497 |
+| Participação da maior cidade | 27,6% | 17,1% | 25,8% | 38,7% | 11,3% | 15,5% | 8,1% | 12,2% |
+| Razão 1ª/2ª | 6,83 | 3,92 | 8,87 | 6,93 | 3,25 | 3,19 | 1,15 | 2,88 |
+| Gini | 0,617 | 0,584 | 0,802 | 0,769 | 0,693 | 0,709 | 0,703 | 0,740 |
+| *q* (todos) | 0,901 | 0,831 | 1,410 | 1,420 | 1,068 | 1,122 | 1,218 | 1,240 |
+| *q* (20 maiores) | 0,988 | 0,927 | 0,878 | 1,041 | 0,872 | 0,840 | 0,787 | 0,746 |
+| *p* do teste *q* = 1 (20 maiores, erro usual) | 0,887 | 0,207 | 0,199 | 0,540 | < 0,001 | < 0,001 | < 0,001 | < 0,001 |
 
-Entre os 20 maiores, o Ceará tem o expoente mais próximo de 1, e o Paraná é o único estado em que a Lei de Zipf é rejeitada. A primazia de Fortaleza só é superada pela de São Paulo. Com todos os municípios, *q* varia muito entre os estados (de 0,83 a 1,41), porque depende do número de municípios pequenos de cada um.
+Na participação da maior cidade, o Ceará só fica atrás do Rio de Janeiro; na razão 1ª/2ª, só São Paulo e Rio de Janeiro superam Fortaleza. Santa Catarina é o estado mais policêntrico (Joinville é só 1,15 vez maior que Florianópolis). Pelo erro usual da regressão, a Lei de Zipf é rejeitada entre os 20 maiores em Minas Gerais, no Paraná, em Santa Catarina e no Rio Grande do Sul, mas esse erro é subestimado (veja a seção seguinte). Com todos os municípios, *q* varia de 0,83 a 1,42, porque depende dos municípios pequenos de cada estado.
 
 ## Estimação por máxima verossimilhança (Newman, 2005)
 
 A seção 13 do notebook segue as recomendações de Newman (2005): estima o expoente α da lei de potência p(x) ∝ x^(−α) por máxima verossimilhança, só na cauda acima de x_min, escolhido pelo critério de Kolmogorov-Smirnov, e testa a aderência por bootstrap (Clauset, Shalizi e Newman, 2009). A relação com o expoente de Zipf é *q* = 1/(α − 1), de modo que a Lei de Zipf corresponde a α = 2. A seção também refaz o teste *q* = 1 da regressão com o erro padrão de Gabaix e Ibragimov (2011).
 
-| Resultado | Ceará | Bahia | São Paulo | Paraná |
-|---|---:|---:|---:|---:|
-| x_min (habitantes) | 15.157 | 24.661 | 16.641 | 10.233 |
-| Municípios na cauda | 129 | 123 | 287 | 192 |
-| α (máxima verossimilhança) | 2,18 ± 0,10 | 2,44 ± 0,13 | 1,79 ± 0,05 | 2,05 ± 0,08 |
-| *p* do teste α = 2 | 0,089 | < 0,001 | < 0,001 | 0,539 |
-| *p* de aderência (bootstrap) | 0,033 | 0,728 | 0,000 | 0,663 |
-| *p* do teste *q* = 1, 20 maiores, erro de Gabaix-Ibragimov | 0,970 | 0,802 | 0,661 | 0,548 |
+| Resultado | CE | BA | SP | RJ | MG | PR | SC | RS |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| x_min (habitantes) | 15.157 | 24.661 | 16.641 | 116.841 | 10.275 | 10.233 | 9.792 | 2.480 |
+| Municípios na cauda | 129 | 123 | 287 | 26 | 364 | 192 | 135 | 414 |
+| α (máxima verossimilhança) | 2,18 ± 0,10 | 2,44 ± 0,13 | 1,79 ± 0,05 | 2,12 ± 0,22 | 2,08 ± 0,06 | 2,05 ± 0,08 | 1,95 ± 0,08 | 1,73 ± 0,04 |
+| *p* do teste α = 2 | 0,089 | < 0,001 | < 0,001 | 0,580 | 0,158 | 0,539 | 0,553 | < 0,001 |
+| *p* de aderência (bootstrap) | 0,033 | 0,728 | 0,000 | 0,412 | 0,227 | 0,663 | 0,380 | 0,012 |
+| *p* do teste *q* = 1, 20 maiores, erro de Gabaix-Ibragimov | 0,970 | 0,802 | 0,659 | 0,900 | 0,641 | 0,547 | 0,391 | 0,281 |
+| Municípios ≥ 100 mil, previstos / observados | 14,0 / 8 | 16,4 / 18 | 70,2 / 78 | 31,0 / 28 | 31,2 / 34 | 17,7 / 22 | 14,8 / 14 | 27,4 / 19 |
 
-No Ceará, o expoente é compatível com Zipf, mas uma única lei de potência descreve mal a cauda (*p* = 0,033): Fortaleza é grande demais e há só 8 municípios acima de 100 mil habitantes, onde o ajuste prevê 14. Com o erro padrão corrigido, nenhum estado rejeita *q* = 1 entre os 20 maiores, e o Paraná, rejeitado pela regressão, é o estado mais próximo de Zipf pela máxima verossimilhança.
+O Ceará é o único dos oito estados em que o expoente é compatível com Zipf, mas a lei de potência é rejeitada (*p* = 0,033), e o que tem a maior falta relativa de cidades médias: 8 municípios acima de 100 mil habitantes, onde o ajuste prevê 14. Com o erro padrão corrigido, nenhum estado rejeita *q* = 1 entre os 20 maiores. A lei de potência é plausível na Bahia, no Rio de Janeiro, em Minas Gerais, no Paraná e em Santa Catarina, e rejeitada em São Paulo e no Rio Grande do Sul. No Rio de Janeiro, a cauda tem só 26 municípios, e o teste tem pouco poder.
+
+## Versão 4: comparação com os nove estados do Nordeste
+
+O notebook `Lei_de_Zipf_Nordeste_v4.ipynb` repete o estudo do Ceará e o compara com os outros oito estados do Nordeste (MA, PI, RN, PB, PE, AL, SE e BA). As versões anteriores não foram alteradas. A v4 também traz uma seção nova (14), que calcula a distribuição do maior município numa lei de potência (Newman, 2005, seção III.B), a probabilidade da razão 1ª/2ª e um teste binomial para o número de municípios acima de 100 mil habitantes. As saídas vão para `notebook_output/v4/` e o artigo está em `artigo/artigo_v4.typ` (PDF: `pdfs/entrega/trabalho_zipf_ceara_davipassos_v4.pdf`).
+
+| Resultado | MA | PI | CE | RN | PB | PE | AL | SE | BA |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Municípios | 217 | 224 | 184 | 167 | 223 | 185 | 102 | 75 | 417 |
+| Participação da maior cidade | 15,3% | 26,5% | 27,6% | 22,7% | 21,0% | 16,4% | 30,6% | 27,3% | 17,1% |
+| Razão 1ª/2ª | 3,80 | 5,34 | 6,83 | 2,84 | 1,99 | 2,31 | 4,08 | 3,13 | 3,92 |
+| α (máxima verossimilhança) | 2,48 | 2,24 | 2,18 | 2,24 | 2,49 | 2,21 | 2,50 | 2,33 | 2,44 |
+| *p* de aderência (bootstrap) | 0,690 | 0,885 | 0,033 | 0,900 | 0,435 | 0,836 | 0,180 | 0,926 | 0,728 |
+| P(maior ≥ observado) | 0,231 | 0,209 | 0,281 | 0,284 | 0,129 | 0,416 | 0,101 | 0,234 | 0,153 |
+| Municípios ≥ 100 mil, previstos / observados | 8,3 / 10 | 3,4 / 2 | 14,0 / 8 | 4,0 / 4 | 3,2 / 4 | 14,2 / 12 | 3,1 / 2 | 2,9 / 4 | 16,4 / 18 |
+| *p* de falta (binomial) | 0,793 | 0,337 | 0,051 | 0,623 | 0,778 | 0,316 | 0,384 | 0,840 | 0,722 |
+
+O Ceará tem o α mais próximo de 2 na região e é o único estado do Nordeste em que a lei de potência é rejeitada. Nenhuma capital é anômala pela lei ajustada; o que distingue o Ceará é a falta de cidades médias (8 municípios acima de 100 mil, onde a lei prevê 14). Para reproduzir:
+
+```bash
+uv run --with nbconvert --with nbclient jupyter nbconvert --to notebook --execute --inplace \
+    --ExecutePreprocessor.timeout=1200 Lei_de_Zipf_Nordeste_v4.ipynb
+uvx --from typst python -c "import typst; typst.compile('artigo/artigo_v4.typ', output='pdfs/entrega/trabalho_zipf_ceara_davipassos_v4.pdf', root='.')"
+```
+
+## Versão 5: artigo de 3 páginas na sequência de Newman (2005)
+
+O notebook `Lei_de_Zipf_Ceara_v5.ipynb` contém as seções da versão 4 e duas seções novas. A seção 15 compara a lei de potência com a log-normal truncada pelo teste da razão de verossimilhança (Clauset, Shalizi e Newman, 2009) e testa a aderência da log-normal por bootstrap. A seção 16 gera a figura única do artigo `artigo/artigo_v5.typ` (PDF: `pdfs/entrega/trabalho_zipf_ceara_davipassos_v5.pdf`, 3 páginas), organizado em medir, estimar, testar e interpretar. As saídas vão para `notebook_output/v5/`.
+
+| Ceará, cauda acima de 15.157 hab. | Lei de potência | Log-normal truncada |
+|---|---:|---:|
+| *p* de aderência (bootstrap) | 0,033 | 0,318 |
+| Razão de verossimilhança 𝓡 (*p* de Vuong) | −0,89 (0,584) | |
+| Municípios ≥ 100 mil previstos (observados: 8) | 14,0 | 13,1 |
+| *p* de falta de cidades médias (binomial) | 0,051 | 0,083 |
+| P(maior ≥ Fortaleza) | 0,281 | 0,050 |
+
+A falta de cidades médias aparece nos dois modelos. Já o tamanho de Fortaleza só é anômalo pela log-normal, e os dados não distinguem os dois modelos. Nos outros oito estados do Nordeste, o ajuste da log-normal converge para a própria lei de potência. Para reproduzir (cerca de 1 minuto):
+
+```bash
+uv run --with nbconvert --with nbclient jupyter nbconvert --to notebook --execute --inplace \
+    --ExecutePreprocessor.timeout=1800 Lei_de_Zipf_Ceara_v5.ipynb
+uvx --from typst python -c "import typst; typst.compile('artigo/artigo_v5.typ', output='pdfs/entrega/trabalho_zipf_ceara_davipassos_v5.pdf', root='.')"
+```
+
+## Versão 5.3: impactos no território
+
+A seção 17 do notebook `Lei_de_Zipf_Ceara_v5.ipynb` mede a falta de cidades médias em municípios, habitantes e distância. O artigo `artigo/artigo_v5_v3.typ` (PDF: `pdfs/entrega/trabalho_zipf_ceara_davipassos_v5_v3.pdf`, 6 páginas) incorpora esses resultados.
+
+- A hierarquia se interrompe por volta de 85 mil habitantes: 14 municípios estão entre 70 mil e 85 mil, e só 2 entre 85 mil e 130 mil.
+- As posições 2 a 14 somam de 200 mil a 740 mil habitantes a menos do que o previsto, conforme o modelo.
+- Cerca de 1,29 milhão de cearenses (14,7%) vivem a mais de 100 km de um município com 100 mil habitantes; com polos a partir de 80 mil, são 4,5%.
+- A distância é em linha reta, e os dados não medem acesso a serviços.
 
 ## Estrutura do projeto
 
@@ -98,14 +151,14 @@ As células baixam os dados para `data/` (e reutilizam os arquivos nas execuçõ
 | `municipios_ceara_populacao_2022.csv` | população, posição e logaritmos de cada município |
 | `resultados_regressao.csv` | resultados das duas regressões |
 | `resultados_resumo.json` | resumo completo, incluindo as estatísticas auxiliares |
-| `figura_zipf_outros_estados.png` | mapas e gráficos rank-size da Bahia, de São Paulo e do Paraná |
-| `figura_comparacao_estados.png` | curvas rank-size dos quatro estados e expoentes *q* com IC de 95% |
+| `figura_zipf_outros_estados.png` | mapas e gráficos rank-size dos outros sete estados |
+| `figura_comparacao_estados.png` | curvas rank-size dos oito estados e expoentes *q* com IC de 95% |
 | `comparacao_estados_concentracao.csv` | participação da maior cidade, razão 1ª/2ª e Gini por estado |
 | `comparacao_estados_regressao.csv` | regressões de cada estado (todos os municípios e 20 maiores) |
-| `municipios_<estado>_populacao_2022.csv` | população e posição dos municípios da Bahia, de São Paulo e do Paraná |
+| `municipios_<estado>_populacao_2022.csv` | população e posição dos municípios de cada um dos outros sete estados |
 | `maxima_verossimilhanca_estados.csv` | x_min, α, erro padrão, testes e participação dos 10% maiores por estado |
 | `erro_padrao_gabaix_ibragimov.csv` | teste *q* = 1 da regressão com o erro padrão de Gabaix e Ibragimov |
-| `figura_maxima_verossimilhanca.png` | distribuições cumulativas dos quatro estados e α por método |
+| `figura_maxima_verossimilhanca.png` | distribuições cumulativas dos oito estados e α por método |
 
 Os valores esperados estão nas seções 11 (Ceará), 12 (comparação) e 13 (máxima verossimilhança) do notebook. Para recomeçar do zero, apague `data/` e `notebook_output/` e execute tudo de novo.
 
@@ -114,7 +167,7 @@ Os valores esperados estão nas seções 11 (Ceará), 12 (comparação) e 13 (m�
 O artigo é escrito em [Typst](https://typst.app/) e usa as figuras de `notebook_output/`, então o notebook precisa ter sido executado antes. Na raiz do projeto:
 
 ```bash
-uvx --from typst python -c "import typst; typst.compile('artigo/artigo.typ', output='pdfs/entrega/trabalho_zipf_ceara_davipassos_v2.pdf', root='.')"
+uvx --from typst python -c "import typst; typst.compile('artigo/artigo.typ', output='pdfs/entrega/trabalho_zipf_ceara_davipassos_v3.pdf', root='.')"
 ```
 
 ## Limitações
