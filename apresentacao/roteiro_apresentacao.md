@@ -31,6 +31,45 @@ Se você esquecer todo o resto, lembre destas cinco frases:
 
 ---
 
+## 0.1 Explicação rápida: o que são as leis de potência de Newman
+
+Use esta seção para se preparar e para responder perguntas. Se sobrar tempo na fala, vale dizer a versão curta do fim.
+
+**A ideia em uma frase.** Newman (2005, *Power laws, Pareto distributions and Zipf's law*) explica como reconhecer e medir corretamente fenômenos em que existem poucos casos enormes e muitos casos pequenos, sem um tamanho típico.
+
+**O que é uma lei de potência.** A fração de cidades com população x é
+
+> p(x) = C · x^(−α)
+
+Em palavras: quanto maior a cidade, mais rara ela é, e essa raridade cai segundo uma potência de x. O expoente α diz o quanto. Quanto maior o α, mais raras são as cidades grandes.
+
+**Por que se diz que "não tem tamanho típico".** Altura de pessoas tem uma média e quase ninguém foge dela. Em uma lei de potência, os valores variam por várias ordens de grandeza (de milhares a milhões de habitantes), e por isso a média diz pouco. Isso também significa que o maior valor varia muito de uma amostra para outra.
+
+**Como ela aparece em gráfico.** Em escala log-log, uma lei de potência vira uma **linha reta**, e a inclinação dessa reta dá o α. Newman recomenda desenhar a função cumulativa P(X ≥ x), em vez do histograma, porque ela não depende da escolha de intervalos.
+
+**Ligação com Zipf.** Zipf olha para o ranking (a cidade de posição r tem população proporcional a r^(−q)). Newman mostra que é a mesma lei vista com os eixos trocados, e que as duas se convertem por
+
+> α = 1 + 1/q
+
+Então Zipf estrito (q = 1) corresponde a **α = 2**. Foi por isso que o trabalho usou α = 2 como referência.
+
+**O recado de método (o que o trabalho aproveita de Newman).**
+
+1. **Não confiar na reta de mínimos quadrados.** Ela dá estimativas enviesadas e erros pequenos demais, e um R² alto não prova lei de potência.
+2. **Estimar α por máxima verossimilhança**, com a fórmula α = 1 + n [Σ ln(xᵢ / x_min)]⁻¹, e erro (α − 1)/√n.
+3. **Ajustar só a cauda**, isto é, os valores acima de um x_min, porque a lei de potência costuma valer só para os valores grandes.
+4. **Testar se a lei de potência é plausível**, e não só ajustá-la. O trabalho usa bootstrap e compara com a log-normal.
+5. **Perguntar se o maior valor é "anômalo"** pelo cálculo de probabilidade (a Eq. 4 do artigo), em vez de olhar se ele fica acima da reta.
+
+**Versão curta para falar (≈ 20 s):**
+
+> Uma lei de potência é uma distribuição em que existem poucas cidades enormes e muitas pequenas, sem um tamanho típico. Em escala log-log ela vira uma reta, e a inclinação é o expoente α. A Lei de Zipf é o caso particular de α igual a 2. O Newman mostrou como medir isso direito: estimar o expoente por máxima verossimilhança, só na cauda, e testar se a lei realmente se ajusta, em vez de confiar na regressão de mínimos quadrados.
+
+**Pergunta provável:** *"Por que α = 2 é Zipf?"*
+Porque q = 1/(α − 1). Com q = 1, α − 1 = 1, então α = 2.
+
+---
+
 ## 1. Abertura (≈ 1 min)
 
 > Boa tarde a todos. Eu sou o Davi, e vou apresentar o meu trabalho de Ciência de Dados Aplicada à Ciência das Cidades.
