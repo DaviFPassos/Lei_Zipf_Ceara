@@ -142,3 +142,5 @@ Script: `analise/coletar_solo_amostra.py` (SoilGrids/ISRIC, 5 a 15 cm de profund
 ## Versão final do artigo
 
 `artigo/artigo_final.typ` (copia de `artigo_v5_v3.typ`) gera `pdfs/entrega/trabalho_zipf_ceara_davipassos_final.pdf` (7 páginas, 1 a mais que antes por causa de um parágrafo novo na seção 3.6, ajustes nas limitações e na conclusão e três referências a mais). O PDF anterior ficou em `pdfs/testes/trabalho_zipf_ceara_davipassos_final_anterior.pdf`. Chuva e solo ficaram fora do texto (diferença pequena ou ambígua).
+
+**Correções da revisão (versão final).** Acrescentados: sensibilidade à delimitação metropolitana (p 0,033, 0,127, 0,055 e 0,35 para 0, 30, 50 e 70 km), crescimento por faixa com Fortaleza como exceção (estado +4,1%, 100-200 mil +7,8%, 200 mil+ +11,7%), nove testes de aderência nas limitações, limiar do p uniformizado (p < 0,05 rejeita; 0,05 a 0,10 evidência moderada), linguagem menos causal para o Cariri e remoção do Cadastro Central de Empresas, que não sustentava nenhum número do texto.
