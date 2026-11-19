@@ -207,7 +207,7 @@ IBGE. *Censo Demográfico 2022: população residente, variação absoluta e tax
 
 IBGE. *Produto interno bruto dos municípios: valor adicionado bruto por atividade econômica* (dados de 2021). SIDRA, tabela 5938. Disponível em: https://sidra.ibge.gov.br/tabela/5938. Acesso em: 17 nov. 2026.
 
-KIMURA, G.; LOUREIRO, C. O. Reservas hídricas subterrâneas do gráben Crato-Juazeiro (CE). In: CONGRESSO BRASILEIRO DE ÁGUAS SUBTERRÂNEAS, 13., 2004. *Anais* [...]. São Paulo: Associação Brasileira de Águas Subterrâneas, 2004.
+KIMURA, G.; LOUREIRO, C. O. Reservas hídricas subterrâneas do gráben Crato-Juazeiro (CE). In: CONGRESSO BRASILEIRO DE ÁGUAS SUBTERRÂNEAS, 13., 2004, Cuiabá. *Anais* [...]. Cuiabá: Associação Brasileira de Águas Subterrâneas, 2004. Disponível em: https://aguassubterraneas.abas.org/asubterraneas/article/view/23618. Acesso em: 19 nov. 2026.
 
 NEWMAN, M. E. J. Power laws, Pareto distributions and Zipf's law. *Contemporary Physics*, v. 46, n. 5, p. 323-351, 2005. https://doi.org/10.1080/00107510500052444.
 
