@@ -188,3 +188,7 @@ uvx --from typst python -c "import typst; typst.compile('artigo/artigo.typ', out
 - SIMON, H. A. On a class of skew distribution functions. *Biometrika*, v. 42, n. 3/4, p. 425-440, 1955. https://doi.org/10.2307/2333389
 - SOO, K. T. Zipf's law for cities: a cross-country investigation. *Regional Science and Urban Economics*, v. 35, n. 3, p. 239-263, 2005. https://doi.org/10.1016/j.regsciurbeco.2004.04.004
 - ZIPF, G. K. *Human behavior and the principle of least effort*. Cambridge: Addison-Wesley, 1949.
+
+## Versão 6: artigo de 3 páginas
+
+O artigo `artigo/artigo_v6.typ` (PDF: `pdfs/entrega/trabalho_zipf_ceara_davipassos_v6.pdf`, 3 páginas) condensa o v5_v3 para o limite do manual do trabalho. Mantém as três perguntas, a figura da distribuição cumulativa com o α dos nove estados, a tabela de lei de potência contra log-normal e a figura de distância; a tabela dos estados do Nordeste virou texto. Para compilar, depois de executar o notebook: `uvx --from typst python -c "import typst; typst.compile('artigo/artigo_v6.typ', output='pdfs/entrega/trabalho_zipf_ceara_davipassos_v6.pdf', root='.')"`.

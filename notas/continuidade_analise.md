@@ -110,3 +110,11 @@ Seção 17 acrescentada ao fim de `Lei_de_Zipf_Ceara_v5.ipynb`, sem alterar as s
 - **Simulação:** Quixeramobim, Crateús, Iguatu e Quixadá reduziriam a população a mais de 100 km de 1,29 milhão para 160 mil. Não é previsão; o limite de 100 mil é arbitrário.
 - **Correção de recomendação:** a v5_v3 deixa de citar Juazeiro do Norte, Crato e Sobral, que já passam de 100 mil, como prioridade.
 
+
+## Versão 6 (16/11/2026): artigo de 3 páginas
+
+Branch `test_v6`. Arquivos novos: `artigo/artigo_v6.typ` e `pdfs/entrega/trabalho_zipf_ceara_davipassos_v6.pdf`, com 3 páginas (limite do manual), condensados a partir da v5_v3. Nenhum número novo: tudo vem do notebook v5 já executado.
+
+- **O que saiu:** a figura do mapa e do rank-size (antiga Figura 1), a Tabela 2 dos nove estados (virou um parágrafo, e o painel (b) da Figura 1 mostra o α por estado), o parágrafo sobre quais cidades ficam acima da reta de Zipf, e os detalhes de como cada passo do método foi escolhido.
+- **O que ficou:** as três perguntas do manual, a Figura 1 (cumulativa e α por estado), a Tabela 1 (lei de potência contra log-normal), a Figura 2 (distância, reduzida a 58% da largura) e as limitações. Fonte 10 pt, margens de 1,8 cm e 1,5 cm, referências em 8,5 pt.
+- **Conferir antes de entregar:** a regressão dos 20 maiores e o 𝑅² aparecem só em uma frase; o mapa da Figura 1(a) antiga não está mais no artigo (continua em `notebook_output/v5/figura_zipf_ceara.png`).
